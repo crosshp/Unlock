@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
  */
 public class PlayerService extends Service {
     static volatile MediaPlayer player = null;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -28,6 +29,7 @@ public class PlayerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // Инициализация плеера и проигривание записи
         System.out.println("Play Music");
         player = MediaPlayer.create(this, R.raw.foneground);
         player.start();

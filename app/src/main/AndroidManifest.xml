@@ -20,8 +20,6 @@
             </intent-filter>
         </activity>
 
-
-
         <receiver android:name=".ScreenOnOffReciver">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />

@@ -16,17 +16,21 @@ public class VolumeDownMediaReciver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        // Сохранение времени клика
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         long last = settings.getLong("last", 0);
         long delta = System.currentTimeMillis() - last;
+        // Проверка двойного клика
         if (delta < DOUBLE_CLICK_DELAY) {
             System.out.println("Double Click");
             SharedPreferences.Editor editor = settings.edit();
             editor.putLong("last", 0);
             editor.commit();
+            // Включение экрана
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             PowerManager.WakeLock wakeLock = pm.newWakeLock((PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "TAG");
             wakeLock.acquire();
+            // Вибратор
             Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             long milliseconds = 700;
             v.vibrate(milliseconds);

@@ -2,26 +2,27 @@ package com.learn_thing.animation;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
 import android.os.IBinder;
 
 public class ScreenOnOffService extends Service {
-    BroadcastReceiver mReceiver = null;
+
+    BroadcastReceiver screenReceiver = null;
     BroadcastReceiver volumeReciver = null;
     Intent intentService = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        //Фильтр для ресивера который отвечает за состояния экрана
         intentService = new Intent(getBaseContext(), PlayerService.class);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
-        mReceiver = new ScreenOnOffReciver();
-        registerReceiver(mReceiver, filter);
+        screenReceiver = new ScreenOnOffReciver();
+        // Регистрация фильтра
+        registerReceiver(screenReceiver, filter);
     }
 
     @Override
@@ -33,13 +34,16 @@ public class ScreenOnOffService extends Service {
 
         } catch (Exception e) {
         }
+        // Включен экран
         if (!screenOff) {
             stopService(intentService);
             if (volumeReciver != null) {
                 unregisterReceiver(volumeReciver);
                 volumeReciver = null;
             }
+            // Выключен экран
         } else {
+            // Регистрация ресивера для отловки кнопок
             if(volumeReciver==null){
                 IntentFilter filterVolume = new IntentFilter();
                 filterVolume.addAction(Intent.ACTION_MEDIA_BUTTON);
