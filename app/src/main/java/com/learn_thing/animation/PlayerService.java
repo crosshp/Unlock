@@ -12,6 +12,10 @@ import android.support.annotation.Nullable;
  * Created by Andrew on 27.03.2016.
  */
 public class PlayerService extends Service {
+
+    static boolean isFirstClick = false;
+    static boolean isSecondClick = false;
+    static boolean isThirdClick = false;
     static volatile MediaPlayer player = null;
 
     @Nullable

@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 
 public class ScreenOnOffService extends Service {
@@ -12,6 +13,7 @@ public class ScreenOnOffService extends Service {
     BroadcastReceiver screenReceiver = null;
     BroadcastReceiver volumeReciver = null;
     Intent intentService = null;
+    String PREFS_NAME = "delay";
     static KeyguardManager.KeyguardLock keyguardLock = null;
 
     @Override
@@ -39,6 +41,11 @@ public class ScreenOnOffService extends Service {
         // Включен экран
         if (!screenOff) {
             stopService(intentService);
+            SharedPreferences settings = getBaseContext().getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putLong("last", 0);
+            editor.putBoolean("firstClick", false);
+            editor.commit();
             if (volumeReciver != null) {
                 unregisterReceiver(volumeReciver);
                 volumeReciver = null;
@@ -60,8 +67,6 @@ public class ScreenOnOffService extends Service {
             }
             startService(intentService);
         }
-
-
     }
 
     @Override
