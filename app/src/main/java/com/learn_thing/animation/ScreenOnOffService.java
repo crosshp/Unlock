@@ -1,5 +1,6 @@
 package com.learn_thing.animation;
 
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -11,6 +12,7 @@ public class ScreenOnOffService extends Service {
     BroadcastReceiver screenReceiver = null;
     BroadcastReceiver volumeReciver = null;
     Intent intentService = null;
+    static KeyguardManager.KeyguardLock keyguardLock = null;
 
     @Override
     public void onCreate() {
@@ -43,6 +45,10 @@ public class ScreenOnOffService extends Service {
             }
             // Выключен экран
         } else {
+            // Возобновление блокировки
+            if(keyguardLock!=null) {
+                keyguardLock.reenableKeyguard();
+            }
             // Регистрация ресивера для отловки кнопок
             if(volumeReciver==null){
                 IntentFilter filterVolume = new IntentFilter();
@@ -67,5 +73,8 @@ public class ScreenOnOffService extends Service {
     public void onDestroy() {
         unregisterReceiver(volumeReciver);
         volumeReciver = null;
+        if(keyguardLock!=null) {
+            keyguardLock.reenableKeyguard();
+        }
     }
 }

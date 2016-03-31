@@ -1,5 +1,6 @@
 package com.learn_thing.animation;
 
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +12,14 @@ import android.os.Vibrator;
  * Created by Andrew on 29.03.2016.
  */
 public class VolumeDownMediaReciver extends BroadcastReceiver {
-    int DOUBLE_CLICK_DELAY = 500;
+    int DOUBLE_CLICK_DELAY = 400;
     String PREFS_NAME = "delay";
+    private KeyguardManager.KeyguardLock kl;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        kl = km.newKeyguardLock("MyKeyguardLock");
         // Сохранение времени клика
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         long last = settings.getLong("last", 0);
@@ -32,14 +36,15 @@ public class VolumeDownMediaReciver extends BroadcastReceiver {
             wakeLock.acquire();
             // Вибратор
             Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-            long milliseconds = 700;
+            long milliseconds = 200;
             v.vibrate(milliseconds);
+            kl.disableKeyguard();
+            ScreenOnOffService.keyguardLock = kl;
             wakeLock.release();
         } else {
             SharedPreferences.Editor editor = settings.edit();
             editor.putLong("last", System.currentTimeMillis());
             editor.commit();
         }
-
     }
 }
