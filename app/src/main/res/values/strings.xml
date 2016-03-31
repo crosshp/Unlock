@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Animation</string>
+    <string name="text">Привет, заблокируй экран!\nНажми вниз-вверх-вниз чтобы разблокировать экран </string>
 </resources>
