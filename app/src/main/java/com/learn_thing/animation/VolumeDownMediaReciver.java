@@ -12,7 +12,7 @@ import android.os.Vibrator;
  * Created by Andrew on 29.03.2016.
  */
 public class VolumeDownMediaReciver extends BroadcastReceiver {
-    int DOUBLE_CLICK_DELAY = 700;
+    int DOUBLE_CLICK_DELAY = 900;
     String PREFS_NAME = "delay";
     private KeyguardManager.KeyguardLock kl;
     private boolean isVolumeUp = false;
@@ -118,6 +118,13 @@ public class VolumeDownMediaReciver extends BroadcastReceiver {
                             kl.disableKeyguard();
                             ScreenOnOffService.keyguardLock = kl;
                             wakeLock.release();
+
+                            /*
+                            * Здесь код вставить!!! Это разблокировка.
+                            * старт сервиса
+                            *
+                            * */
+
                         }
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putBoolean("firstClick", false);
